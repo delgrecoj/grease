@@ -1,6 +1,6 @@
 defmodule Grease do
-  # intention here is to smooth over the same problem Sugar.set/2 does,
-  # except provide cleaner syntax when id atom fields can be assumed to exist.
+  # helper function for improving ergonomics of updating nested maps in lists,
+  # provided id atom fields can be assumed to exist; see GreaseExamples for usage.
   def set(data, keywordlist) when is_list(data) do
     [fieldpair | [{leadin, fieldpairindex} | rest]] = Enum.reverse(keywordlist)
     args = [id: fieldpairindex] ++ [fieldpair]
@@ -8,7 +8,7 @@ defmodule Grease do
     setfn.(data)
   end
 
-  # duplicate of Sugar.set/1; generate fn for updating particular field with literal or fn
+  # generate function for updating particular field using literal or function
   defp setp([{keyf, keyv}, {valf, valv}]) when is_atom(keyf) and is_atom(valf) do
     fn data ->
       Enum.map(data, fn map ->
@@ -100,11 +100,6 @@ defmodule GreaseExamples do
     #     job
     #   end
     # end)
-
-    # jobs
-    # |> IO.inspect(label: "before")
-    # |> Grease.set(id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
-    # |> IO.inspect(label: "after")
   end
 
   def simple_set() do
@@ -126,11 +121,6 @@ defmodule GreaseExamples do
     #     m
     #   end
     # end)
-
-    # data
-    # |> IO.inspect(label: "before")
-    # |> Grease.set(id: 3, count: 60)
-    # |> IO.inspect(label: "after")
   end
 
   def set_using_fn() do
