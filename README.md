@@ -93,3 +93,7 @@ Grease.set(views, id: 0, count: &(&1 + 1))
 Grease.set(jobs, id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
 ```
 
+Note that `Grease.set/2` assumes there are `:id` fields at each level; you'll have to design your data structures around
+that, but those `:id` fields needn't be any particular type beyond something that behaves well with `==`, nor need they
+be the same type, i.e. you can have one level use integer ids and another use `make_ref()` ids.
+
