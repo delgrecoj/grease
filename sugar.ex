@@ -1,5 +1,4 @@
 defmodule Sugar do
-
   # often have data that follows this format:
   # [
   #   %{id: 0, val: "asdf"},
@@ -54,7 +53,6 @@ defmodule Sugar do
       end)
     end
   end
-
 end
 
 defmodule SugarExamples do

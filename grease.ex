@@ -1,5 +1,4 @@
 defmodule Grease do
-
   # duplicate of Sugar.set/1
   def set([{keyf, keyv}, {valf, valv}]) when is_atom(keyf) and is_atom(valf) do
     fn data ->
@@ -45,33 +44,43 @@ defmodule Grease do
 
   # recursively deconstructs the keyword list into nested fncalls
   defp rd(prev, :id, []) when is_function(prev), do: prev
-  defp rd(prev, leadin, [{new_leadin, v} | rest]) when is_function(prev) and is_atom(leadin) and is_atom(new_leadin) and is_list(rest) do
+
+  defp rd(prev, leadin, [{new_leadin, v} | rest])
+       when is_function(prev) and is_atom(leadin) and is_atom(new_leadin) and is_list(rest) do
     rd(Grease.set([id: v] ++ [{leadin, prev}]), new_leadin, rest)
   end
-
 end
 
 defmodule GreaseExamples do
   def very_nested_set() do
     jobs = [
-      %{id: 0, ops: [
-        %{id: 0, specs: [
-          %{id: 0, comments: [
-            %{id: 0, text: "asdf"}
-          ]}
-        ]}
-      ]}
+      %{
+        id: 0,
+        ops: [
+          %{
+            id: 0,
+            specs: [
+              %{
+                id: 0,
+                comments: [
+                  %{id: 0, text: "asdf"}
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ]
 
     # various ways of calling:
-    Grease.set(jobs, [id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty"])
+    Grease.set(jobs, id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
     Grease.set(jobs, id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
     jobs |> Grease.set(id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
 
     jobs
-    |> IO.inspect([label: "before"])
+    |> IO.inspect(label: "before")
     |> Grease.set(id: 0, ops: 0, specs: 0, comments: 0, text: "qwerty")
-    |> IO.inspect([label: "after"])
+    |> IO.inspect(label: "after")
   end
 
   def simple_set() do
@@ -95,8 +104,8 @@ defmodule GreaseExamples do
     # end)
 
     data
-    |> IO.inspect([label: "before"])
+    |> IO.inspect(label: "before")
     |> Grease.set(id: 3, count: 60)
-    |> IO.inspect([label: "after"])
+    |> IO.inspect(label: "after")
   end
 end
